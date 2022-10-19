@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2021",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": "./src/",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,7 +19,20 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "noImplicitAny": true,                       
+    "strictNullChecks": true,                    
+    "strictFunctionTypes": true,                
+    "strictBindCallApply": true,                 
+    "strictPropertyInitialization": true,       
+    "noImplicitThis": true,                     
+    "alwaysStrict": true,                     
+    // "noUnusedLocals": true,                      
+    "noUnusedParameters": true,                  
+    "noImplicitReturns": true,                   
+    "noUncheckedIndexedAccess": true,            
+    "noImplicitOverride": true,                  
+    "noPropertyAccessFromIndexSignature": true
   },
   "include": [
     "src"
