@@ -14,11 +14,24 @@ const StyledFlexContainer = styled(FlexContainer)`
   justify-content: space-around;
 `;
 
-const ControlsNav: FunctionComponent = () => (
+interface ControlsNavProps {
+  handleStart: () => void;
+  isStarted: boolean;
+}
+
+const ControlsNav: FunctionComponent<ControlsNavProps> = ({ isStarted, handleStart }) => (
   <StyledBorderFlexContainer backgroundColor="light">
     <StyledFlexContainer>
-      <Button color="primary">Pause</Button>
-      <Button color="warning200">Reset</Button>
+      {isStarted ? (
+        <>
+          <Button color="primary">Pause</Button>
+          <Button color="warning200">Reset</Button>
+        </>
+      ) : (
+        <Button color="primary" onClick={handleStart}>
+          Start
+        </Button>
+      )}
     </StyledFlexContainer>
   </StyledBorderFlexContainer>
 );

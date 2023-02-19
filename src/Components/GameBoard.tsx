@@ -1,4 +1,3 @@
-import Button from 'Basic Components/Button';
 import { BorderFlexContainer, FlexContainer } from 'Basic Components/FlexContainer';
 import { MovementDirection, MovementDirectionCorner, MOVEMENT_DIRECTION } from 'Definitions/Snake';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
@@ -76,12 +75,12 @@ const getFoodPosition = ({
 // Head not moving. Have a component with ref and just replacing it? to not re-render itself?
 
 interface GameBoardProps {
+  isStarted: boolean;
   extraScore: (extraScore: number) => void;
 }
 
-const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore }) => {
+const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted }) => {
   const [board, setBoard] = useState<React.ReactElement[]>();
-  const [isStarted, setIsStarted] = useState(false);
   const [snakePosition, setSnakePosition] = useState<SnakeStateEvent>(initSnakeState);
   const [foodPosition, setFoodPosition] = useState<number>(0);
   const [eatenFoodPosition, setEatenFoodPosition] = useState<number[]>([]);
@@ -96,7 +95,6 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore }) => {
   };
 
   const handleMovement = (direction: MovementDirection) => {
-    console.log({ direction });
     clearTimeout(snakeAutomaticMovementTimer);
 
     const { head, body, tail } = snakePosition;
@@ -173,37 +171,38 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore }) => {
     prev.current = { ...snakePosition, snakeDirection };
   }, [snakePosition]);
 
-  const handleKeyDown = (e: KeyboardEvent): void => {
-    const keyDownToDirection: { [key: string]: () => void } = {
-      ArrowUp: () => handleMovement(MOVEMENT_DIRECTION.UP),
-      ArrowDown: () => handleMovement(MOVEMENT_DIRECTION.DOWN),
-      ArrowLeft: () => handleMovement(MOVEMENT_DIRECTION.LEFT),
-      ArrowRight: () => handleMovement(MOVEMENT_DIRECTION.RIGHT),
-    };
-
-    if (e.key && Object.keys(keyDownToDirection).includes(e.key)) {
-      keyDownToDirection[e.key]!();
-    }
-  };
-
-  const initSnake = () => {
-    setIsStarted(true);
-    const { head, body, tail } = snakePosition;
-    const firstFoodPosition = getFoodPosition({ board: board!, snakePosition });
-    setFoodPosition(firstFoodPosition);
-    FoodObserver.publishOnly([firstFoodPosition, foodPosition], firstFoodPosition);
-    SnakeObserver.publishOnly([head, ...body, tail], initSnakeState);
-  };
-
   useEffect(() => {
-    setBoard(loadInitBoard());
+    const boards = loadInitBoard();
+    setBoard(boards);
     initBoardBoundaries();
   }, []);
 
   useEffect(() => {
+    if (!board) return;
+    const { head, body, tail } = snakePosition;
+    const firstFoodPosition = getFoodPosition({ board, snakePosition });
+    setFoodPosition(firstFoodPosition);
+    FoodObserver.publishOnly([firstFoodPosition, foodPosition], firstFoodPosition);
+    SnakeObserver.publishOnly([head, ...body, tail], initSnakeState);
+  }, [board]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent): void => {
+      const keyDownToDirection: { [key: string]: () => void } = {
+        ArrowUp: () => handleMovement(MOVEMENT_DIRECTION.UP),
+        ArrowDown: () => handleMovement(MOVEMENT_DIRECTION.DOWN),
+        ArrowLeft: () => handleMovement(MOVEMENT_DIRECTION.LEFT),
+        ArrowRight: () => handleMovement(MOVEMENT_DIRECTION.RIGHT),
+      };
+
+      const keyAction = keyDownToDirection[e.key];
+
+      if (keyAction) keyAction();
+    };
+
     window.addEventListener('keydown', handleKeyDown, true);
     return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [isStarted, snakePosition]);
+  }, [snakePosition]);
 
   useEffect(() => {
     if (!isStarted) return undefined;
@@ -212,15 +211,10 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore }) => {
     setSnakeAutomaticMovementTimer(timer);
 
     return () => clearTimeout(timer);
-  }, [isStarted, snakePosition]);
+  }, [snakePosition]);
 
   return (
     <StyledBoardBordered>
-      {!isStarted && (
-        <Button color="primary" onClick={initSnake}>
-          Start
-        </Button>
-      )}
       <StyledBoard isStarted={isStarted}>{board}</StyledBoard>
     </StyledBoardBordered>
   );

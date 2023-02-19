@@ -5,16 +5,17 @@ import GameHeader from 'Components/GameHeader';
 import React, { FunctionComponent, useState } from 'react';
 
 const SnakeGamePage: FunctionComponent<any> = () => {
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState<number>(0);
+  const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
 
   const handleIncreaseScore = (extraScore: number) => setScore((prev) => prev + extraScore);
 
   return (
     <FlexContainer>
       <GameHeader score={score} />
-      <ControlsNav />
+      <ControlsNav isStarted={isGameStarted} handleStart={() => setIsGameStarted(true)} />
       <FlexContainer>
-        <GameBoard extraScore={handleIncreaseScore} />
+        <GameBoard extraScore={handleIncreaseScore} isStarted={isGameStarted} />
       </FlexContainer>
     </FlexContainer>
   );
