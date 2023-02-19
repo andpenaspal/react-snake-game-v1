@@ -67,6 +67,14 @@
         "namedComponents": "arrow-function",
         "unnamedComponents": "arrow-function"
       }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      { "selector": "enum", "format": ["UPPER_CASE"] },
+      { "selector": "enumMember", "format": ["UPPER_CASE"] },
+
+      { "selector": "typeAlias", "format": ["PascalCase"] }
     ]
   }
 }

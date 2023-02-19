@@ -23,6 +23,13 @@ const spacingFunc = (
 
 const Theme: DefaultTheme = {
   palette: {
+    general: {
+      backgroundColor: {
+        neutral: 'Snow',
+        light: 'WhiteSmoke',
+        dark: 'Silver',
+      },
+    },
     common: {
       black: 'Black',
       white: 'White',
@@ -109,14 +116,6 @@ const Theme: DefaultTheme = {
       units3?: number | string,
       units4?: number | string,
     ) => spacingFunc(units, units2, units3, units4, true),
-  },
-  general: {
-    backgroundColor: {
-      neutral: 'Snow',
-      light: 'WhiteSmoke',
-      dark: 'Silver',
-    },
-    borderRadius: '8px',
   },
 };
 

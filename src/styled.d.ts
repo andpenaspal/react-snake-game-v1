@@ -5,40 +5,52 @@ interface IPalette {
   contrastText: string;
 }
 
+interface IColors {
+  primary: IPalette;
+  secondary: IPalette;
+  tertiary: IPalette;
+  error100: IPalette;
+  error200: IPalette;
+  warning100: IPalette;
+  warning200: IPalette;
+  info100: IPalette;
+  info200: IPalette;
+  success100: IPalette;
+  success200: IPalette;
+}
+export type Colors = keyof IColors;
+
+interface ICommonColors {
+  black: string;
+  white: string;
+  grey100: string;
+  grey200: string;
+  grey300: string;
+  grey400: string;
+  grey500: string;
+  grey600: string;
+  grey800: string;
+  grey900: string;
+}
+export type CommonColors = keyof ICommonColors;
+
+export type Palette = Colors & CommonColors;
+
+interface IBackgroundColors {
+  neutral: string;
+  light: string;
+  dark: string;
+}
+
+export type BackgroundColors = keyof IBackgroundColors;
+
 declare module 'styled-components' {
   export interface DefaultTheme {
-    general: {
-      borderRadius: string;
-      backgroundColor: {
-        neutral: string;
-        light: string;
-        dark: string;
+    palette: IColors & {
+      common: ICommonColors;
+      general: {
+        backgroundColor: IBackgroundColors;
       };
-    };
-    palette: {
-      common: {
-        black: string;
-        white: string;
-        grey100: string;
-        grey200: string;
-        grey300: string;
-        grey400: string;
-        grey500: string;
-        grey600: string;
-        grey800: string;
-        grey900: string;
-      };
-      primary: IPalette;
-      secondary: IPalette;
-      tertiary: IPalette;
-      error100: IPalette;
-      error200: IPalette;
-      warning100: IPalette;
-      warning200: IPalette;
-      info100: IPalette;
-      info200: IPalette;
-      success100: IPalette;
-      success200: IPalette;
     };
     typography: {
       primaryText: string;

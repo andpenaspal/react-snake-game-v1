@@ -4,9 +4,9 @@ const GlobalStyle = createGlobalStyle`
 body {
     background-color: ${({
       theme: {
-        general: { backgroundColor },
+        palette: { general },
       },
-    }) => backgroundColor.neutral};
+    }) => general.backgroundColor.neutral};
 }
 `;
 

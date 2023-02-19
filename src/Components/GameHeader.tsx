@@ -14,7 +14,7 @@ interface GameHeaderProps {
 }
 
 const GameHeader: FunctionComponent<GameHeaderProps> = ({ score }) => (
-  <StyledFlexContainer>
+  <StyledFlexContainer backgroundColor="light">
     <StyledTitle>Score: {score}</StyledTitle>
     <StyledTitle>Time: 00:00</StyledTitle>
   </StyledFlexContainer>
