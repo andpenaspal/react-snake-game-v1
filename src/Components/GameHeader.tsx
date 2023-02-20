@@ -1,11 +1,15 @@
 import React, { FunctionComponent } from 'react';
-import { BorderFlexContainer } from 'Basic Components/FlexContainer';
+import { FlexContainer } from 'Basic Components/FlexContainer';
 import styled from 'styled-components';
 
-const StyledFlexContainer = styled(BorderFlexContainer)``;
+const StyledFlexContainer = styled(FlexContainer)`
+  width: 50%;
+  margin: 20px auto 20px auto;
+`;
 
 const StyledTitle = styled.h3`
-  background-color: ${(props) => props.theme.palette.secondary.main};
+  width: 130px;
+  text-align: center;
   margin: ${(props) => props.theme.spacing.space(1, 2)};
 `;
 
@@ -14,7 +18,7 @@ interface GameHeaderProps {
 }
 
 const GameHeader: FunctionComponent<GameHeaderProps> = ({ score }) => (
-  <StyledFlexContainer backgroundColor="light">
+  <StyledFlexContainer backgroundColor="neutral">
     <StyledTitle>Score: {score}</StyledTitle>
     <StyledTitle>Time: 00:00</StyledTitle>
   </StyledFlexContainer>

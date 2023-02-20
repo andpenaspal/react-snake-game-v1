@@ -3,6 +3,23 @@ import ControlsNav from 'Components/ControlsNav';
 import GameBoard from 'Components/GameBoard';
 import GameHeader from 'Components/GameHeader';
 import React, { FunctionComponent, useState } from 'react';
+import styled from 'styled-components';
+
+const StyledHeader = styled.h1`
+  text-align: center;
+`;
+
+const StyledGameContainer = styled.div`
+  margin: auto;
+  max-width: 750px;
+  height: 500px;
+  border: 1px solid red;
+  border-radius: 10px;
+`;
+
+const StyledBoardContainer = styled(FlexContainer)`
+  margin-top: 30px;
+`;
 
 const SnakeGamePage: FunctionComponent<any> = () => {
   const [score, setScore] = useState<number>(0);
@@ -11,13 +28,17 @@ const SnakeGamePage: FunctionComponent<any> = () => {
   const handleIncreaseScore = (extraScore: number) => setScore((prev) => prev + extraScore);
 
   return (
-    <FlexContainer>
-      <GameHeader score={score} />
-      <ControlsNav isStarted={isGameStarted} handleStart={() => setIsGameStarted(true)} />
-      <FlexContainer>
-        <GameBoard extraScore={handleIncreaseScore} isStarted={isGameStarted} />
-      </FlexContainer>
-    </FlexContainer>
+    <>
+      <StyledHeader>Snake Game</StyledHeader>
+
+      <StyledGameContainer>
+        <GameHeader score={score} />
+        <ControlsNav isStarted={isGameStarted} handleStart={() => setIsGameStarted(true)} />
+        <StyledBoardContainer>
+          <GameBoard extraScore={handleIncreaseScore} isStarted={isGameStarted} />
+        </StyledBoardContainer>
+      </StyledGameContainer>
+    </>
   );
 };
 

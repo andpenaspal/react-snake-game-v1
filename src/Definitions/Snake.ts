@@ -1,5 +1,7 @@
 import { Colors } from 'styled';
 
+export const initialSnakeState = { head: 30, body: [31, 32, 33], tail: 34 };
+
 export const snakeDimension = { head: 14, body: 10, tail: { width: 10, height: 7 } };
 
 export enum MOVEMENT_DIRECTION {

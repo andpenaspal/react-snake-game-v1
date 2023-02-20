@@ -15,8 +15,8 @@ const StyledTile = styled.div`
   /* height: 35px;
   width: 35px; */
 
-  background-color: green;
-  border: 1px solid black;
+  background-color: lightblue;
+  /* border: 1px solid black; */
   box-sizing: border-box;
   display: flex;
   justify-content: center;
