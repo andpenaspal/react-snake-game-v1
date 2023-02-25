@@ -30,7 +30,11 @@ const ControlsNav: FunctionComponent<ControlsNavProps> = ({
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'p') handlePause();
+      if (e.key === 'p' || e.key === ' ') {
+        // Space keydown also "clicks" "Pause" button if user didn't click away after starting the game
+        e.preventDefault();
+        handlePause();
+      }
     };
     window.addEventListener('keydown', handleKeyDown, true);
     return () => window.removeEventListener('keydown', handleKeyDown, true);
