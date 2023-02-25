@@ -27,7 +27,10 @@ const SnakeGamePage: FunctionComponent<any> = () => {
   const [isGamePause, setIsGamePause] = useState<boolean>(false);
 
   const handleIncreaseScore = (extraScore: number) => setScore((prev) => prev + extraScore);
-  const handlePause = () => setIsGamePause((prev) => !prev);
+  const handlePause = () => {
+    console.log('In P');
+    setIsGamePause((prev) => !prev);
+  };
 
   return (
     <>

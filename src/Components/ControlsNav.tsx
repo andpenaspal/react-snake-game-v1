@@ -1,6 +1,6 @@
 import Button from 'Basic Components/Button';
 import { FlexContainer } from 'Basic Components/FlexContainer';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
 
 // const StyledBorderFlexContainer = styled.div`
@@ -27,21 +27,31 @@ const ControlsNav: FunctionComponent<ControlsNavProps> = ({
   handleStart,
   isPause,
   handlePause,
-}) => (
-  <StyledFlexContainer>
-    {isStarted ? (
-      <>
-        <Button color="primary" onClick={handlePause}>
-          {isPause ? 'Resume' : 'Pause'}
+}) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'p') handlePause();
+    };
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [isPause]);
+
+  return (
+    <StyledFlexContainer>
+      {isStarted ? (
+        <>
+          <Button color="primary" onClick={handlePause}>
+            {isPause ? 'Resume' : 'Pause'}
+          </Button>
+          <Button color="warning200">Reset</Button>
+        </>
+      ) : (
+        <Button color="primary" onClick={handleStart}>
+          Start
         </Button>
-        <Button color="warning200">Reset</Button>
-      </>
-    ) : (
-      <Button color="primary" onClick={handleStart}>
-        Start
-      </Button>
-    )}
-  </StyledFlexContainer>
-);
+      )}
+    </StyledFlexContainer>
+  );
+};
 
 export default ControlsNav;
