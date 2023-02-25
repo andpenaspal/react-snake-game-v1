@@ -40,6 +40,7 @@ interface IBackgroundColors {
   neutral: string;
   light: string;
   dark: string;
+  overlay: string;
 }
 
 export type BackgroundColors = keyof IBackgroundColors;

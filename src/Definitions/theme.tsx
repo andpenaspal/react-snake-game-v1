@@ -28,6 +28,7 @@ const Theme: DefaultTheme = {
         neutral: 'Snow',
         light: 'WhiteSmoke',
         dark: 'Silver',
+        overlay: 'rgba(149, 165, 166, 0.8)',
       },
     },
     common: {
@@ -67,7 +68,7 @@ const Theme: DefaultTheme = {
       contrastText: 'white',
     },
     warning200: {
-      main: 'OrangeRed',
+      main: 'green',
       contrastText: 'white',
     },
     info100: {

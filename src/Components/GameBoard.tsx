@@ -18,6 +18,7 @@ import {
   BoardDimensions,
 } from 'utils/SnakeUtils';
 import BoardTile from './BoardTile';
+import GamePause from './GamePause';
 
 const boardBorderDirectionMap = new Map<MovementDirection, number[]>();
 const calculateBoardBoundaries = () => {
@@ -32,9 +33,11 @@ const calculateBoardBoundaries = () => {
 
 interface StyledBoardProps {
   isStarted: boolean;
+  isPause: boolean;
 }
 const StyledBoardBordered = styled.div<StyledBoardProps>`
   display: ${({ isStarted }) => (isStarted ? 'block' : 'none')};
+  ${({ isPause }) => isPause && ` & { position: relative; } `}
   padding: 3px;
   border: 1px solid red;
   border-radius: 5px;
@@ -188,7 +191,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
 
   useEffect(() => {
     if (!isStarted) return undefined;
-    const timer = setTimeout(() => handleMovement(snakeDirection), 100);
+    const timer = setTimeout(() => handleMovement(snakeDirection), 100000);
 
     setSnakeAutomaticMovementTimer(timer);
 
@@ -196,7 +199,8 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
   }, [snakePosition, isStarted, isPause]);
 
   return (
-    <StyledBoardBordered isStarted={isStarted}>
+    <StyledBoardBordered isStarted={isStarted} isPause={isPause}>
+      {isPause && <GamePause />}
       <StyledBoard>{board}</StyledBoard>
     </StyledBoardBordered>
   );
