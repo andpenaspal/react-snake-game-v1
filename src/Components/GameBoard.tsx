@@ -53,6 +53,7 @@ const loadInitBoard = () =>
   ));
 
 // TODO:
+// Pause and Restart
 // Lost!
 // Score on eat
 // Faster on more score?
@@ -60,10 +61,11 @@ const loadInitBoard = () =>
 
 interface GameBoardProps {
   isStarted: boolean;
+  isPause: boolean;
   extraScore: (extraScore: number) => void;
 }
 
-const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted }) => {
+const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, isPause }) => {
   const [board, setBoard] = useState<React.ReactElement[]>();
   const [snakePosition, setSnakePosition] = useState<SnakeStateEvent>(initialSnakeState);
   const [foodPosition, setFoodPosition] = useState<number>(0);
@@ -83,6 +85,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted })
   };
 
   const handleMovement = (direction: MovementDirection) => {
+    if (isPause) return;
     clearTimeout(snakeAutomaticMovementTimer);
 
     const { head, body, tail } = snakePosition;
@@ -172,6 +175,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted })
     SnakeObserver.publishOnly([head, ...body, tail], initialSnakeState);
   }, [board]);
 
+  // Keyboard listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
       const keyAction = keyDownToDirectionSnakeMapper[e.key];
@@ -180,16 +184,16 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted })
 
     window.addEventListener('keydown', handleKeyDown, true);
     return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [snakePosition]);
+  }, [snakePosition, isPause]);
 
   useEffect(() => {
     if (!isStarted) return undefined;
-    const timer = setTimeout(() => handleMovement(snakeDirection), 100000);
+    const timer = setTimeout(() => handleMovement(snakeDirection), 100);
 
     setSnakeAutomaticMovementTimer(timer);
 
     return () => clearTimeout(timer);
-  }, [snakePosition]);
+  }, [snakePosition, isStarted, isPause]);
 
   return (
     <StyledBoardBordered isStarted={isStarted}>

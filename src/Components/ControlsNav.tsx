@@ -18,13 +18,22 @@ const StyledFlexContainer = styled(FlexContainer)`
 interface ControlsNavProps {
   handleStart: () => void;
   isStarted: boolean;
+  isPause: boolean;
+  handlePause: () => void;
 }
 
-const ControlsNav: FunctionComponent<ControlsNavProps> = ({ isStarted, handleStart }) => (
+const ControlsNav: FunctionComponent<ControlsNavProps> = ({
+  isStarted,
+  handleStart,
+  isPause,
+  handlePause,
+}) => (
   <StyledFlexContainer>
     {isStarted ? (
       <>
-        <Button color="primary">Pause</Button>
+        <Button color="primary" onClick={handlePause}>
+          {isPause ? 'Resume' : 'Pause'}
+        </Button>
         <Button color="warning200">Reset</Button>
       </>
     ) : (
