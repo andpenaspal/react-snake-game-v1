@@ -3,16 +3,17 @@ import { FlexContainer } from 'Basic Components/FlexContainer';
 import React, { FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
 
-// const StyledBorderFlexContainer = styled.div`
-//   padding: 10px 10px;
-//   align-items: center;
-// `;
-
 const StyledFlexContainer = styled(FlexContainer)`
   margin: 20px;
   button {
     margin: 0 10px;
   }
+`;
+
+const ControlsWrapper = styled(FlexContainer)`
+  width: 50%;
+  align-items: center;
+  justify-content: space-around;
 `;
 
 interface ControlsNavProps {
@@ -42,18 +43,20 @@ const ControlsNav: FunctionComponent<ControlsNavProps> = ({
 
   return (
     <StyledFlexContainer>
-      {isStarted ? (
-        <>
-          <Button color="primary" onClick={handlePause}>
-            {isPause ? 'Resume' : 'Pause'}
+      <ControlsWrapper>
+        {isStarted ? (
+          <>
+            <Button color="primary" onClick={handlePause}>
+              {isPause ? 'Resume' : 'Pause'}
+            </Button>
+            <Button color="warning200">Reset</Button>
+          </>
+        ) : (
+          <Button color="primary" onClick={handleStart}>
+            Start
           </Button>
-          <Button color="warning200">Reset</Button>
-        </>
-      ) : (
-        <Button color="primary" onClick={handleStart}>
-          Start
-        </Button>
-      )}
+        )}
+      </ControlsWrapper>
     </StyledFlexContainer>
   );
 };
