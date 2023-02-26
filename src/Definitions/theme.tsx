@@ -24,6 +24,10 @@ const spacingFunc = (
 const Theme: DefaultTheme = {
   palette: {
     general: {
+      typography: {
+        primaryText: 'Black',
+        secondaryText: 'Gray',
+      },
       backgroundColor: {
         neutral: 'Snow',
         light: 'WhiteSmoke',
@@ -89,8 +93,22 @@ const Theme: DefaultTheme = {
     },
   },
   typography: {
-    primaryText: 'Black',
-    secondaryText: 'Gray',
+    fontSize: {
+      extraLarge: '3rem',
+      large: '2rem',
+      mediumLarge: '1.5rem',
+      medium: '1rem',
+      smallMedium: '0.8rem',
+      small: '0.7rem',
+    },
+    fontWeight: {
+      extraHeavy: '900',
+      heavy: '700',
+      normalHeavy: '500',
+      normal: '400',
+      lightNormal: '300',
+      light: '100',
+    },
     fontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',

@@ -2,6 +2,7 @@ import { FlexContainer } from 'Basic Components/FlexContainer';
 import ControlsNav from 'Components/ControlsNav';
 import GameBoard from 'Components/GameBoard';
 import GameHeader from 'Components/GameHeader';
+import GameInstructions from 'Components/GameInstructions';
 import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 
@@ -41,6 +42,7 @@ const SnakeGamePage: FunctionComponent<any> = () => {
           isPause={isGamePause}
           handlePause={handlePause}
         />
+        {!isGameStarted && <GameInstructions />}
         <StyledBoardContainer>
           <GameBoard
             extraScore={handleIncreaseScore}

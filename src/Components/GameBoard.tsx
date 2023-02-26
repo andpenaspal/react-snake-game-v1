@@ -182,6 +182,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
       const keyAction = keyDownToDirectionSnakeMapper[e.key];
+      e.preventDefault();
       if (keyAction) handleMovement(keyAction);
     };
 

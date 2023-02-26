@@ -43,6 +43,24 @@ interface IBackgroundColors {
   overlay: string;
 }
 
+interface FontSize {
+  extraLarge: string;
+  large: string;
+  mediumLarge: string;
+  medium: string;
+  smallMedium: string;
+  small: string;
+}
+
+interface FontWeight {
+  extraHeavy: string;
+  heavy: string;
+  normalHeavy: string;
+  normal: string;
+  lightNormal: string;
+  light: string;
+}
+
 export type BackgroundColors = keyof IBackgroundColors;
 
 declare module 'styled-components' {
@@ -50,13 +68,17 @@ declare module 'styled-components' {
     palette: IColors & {
       common: ICommonColors;
       general: {
+        typography: {
+          primaryText: string;
+          secondaryText: string;
+        };
         backgroundColor: IBackgroundColors;
       };
     };
     typography: {
-      primaryText: string;
-      secondaryText: string;
       fontFamily: string;
+      fontSize: FontSize;
+      fontWeight: FontWeight;
     };
     spacing: {
       space: (
