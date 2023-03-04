@@ -48,7 +48,7 @@ const Theme: DefaultTheme = {
       grey900: 'SlateGray',
     },
     primary: {
-      main: 'red',
+      main: '#0892D0',
       contrastText: 'white',
     },
     secondary: {
@@ -68,11 +68,11 @@ const Theme: DefaultTheme = {
       contrastText: 'white',
     },
     warning100: {
-      main: 'Orange',
+      main: '#FFB347',
       contrastText: 'white',
     },
     warning200: {
-      main: 'green',
+      main: 'orange',
       contrastText: 'white',
     },
     info100: {

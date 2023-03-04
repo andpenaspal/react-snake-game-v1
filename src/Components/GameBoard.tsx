@@ -1,9 +1,11 @@
 import { FlexContainer } from 'BasicComponents/FlexContainer';
+import BoardDimensions from 'Definitions/Board';
 import {
   initialSnakeState,
   MovementDirection,
   MovementDirectionCorner,
   MOVEMENT_DIRECTION,
+  snakeSpeed,
 } from 'Definitions/Snake';
 import React, { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -15,7 +17,6 @@ import {
   getNextHeadPosition,
   keyDownToDirectionSnakeMapper,
   getBoardBoundaries,
-  BoardDimensions,
   getNewSnakePosition,
 } from 'utils/SnakeUtils';
 import BoardTile from './BoardTile';
@@ -38,7 +39,12 @@ interface StyledBoardProps {
 const StyledBoardBordered = styled.div<StyledBoardProps>`
   ${({ isPause }) => isPause && ` & { position: relative; } `}
   padding: 3px;
-  border: 1px solid red;
+  border: 1px solid
+    ${({
+      theme: {
+        palette: { common },
+      },
+    }) => common.grey200};
   border-radius: 5px;
 `;
 
@@ -55,7 +61,6 @@ const loadInitBoard = () =>
   ));
 
 // TODO:
-// Lost!
 // Head not moving. Have a component with ref and just replacing it? to not re-render itself?
 
 interface GameBoardProps {
@@ -79,28 +84,22 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
       exclusions: [...Object.values(initialSnakeState)].flat(),
     }),
   );
-  // const [eatenFoodPosition, setEatenFoodPosition] = useState<number[]>([]);
   const [snakeDirection, setSnakeDirection] = useState<MovementDirection>(MOVEMENT_DIRECTION.LEFT);
   const [snakeAutomaticMovementTimer, setSnakeAutomaticMovementTimer] = useState<NodeJS.Timeout>();
   const [isWin, setIsWin] = useState<boolean>(false);
 
-  console.log('Body - re-render');
-
   const setNewFoodPosition = (newSnakePosition: SnakeMovementEvent) => {
-    console.log('Function - setNewFoodPosition');
     const { head, body, tail } = newSnakePosition;
     const newFoodPosition = getRandomPosition({
       possibilities: [...board.keys()],
       exclusions: [head, ...body, tail],
     });
-    console.log({ newFoodPosition });
     setFoodPosition(newFoodPosition);
     FoodObserver.publishOnly([foodPosition, newFoodPosition], newFoodPosition);
     return newFoodPosition;
   };
 
   const handleMovement = (direction: MovementDirection) => {
-    console.log('Function - handleMovement');
     if (isPause || isWin) return;
     clearTimeout(snakeAutomaticMovementTimer);
 
@@ -115,11 +114,13 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
     const isFoodEaten = newHeadPosition === foodPosition;
     const isSnakeCrash = [head, ...body, tail].includes(newHeadPosition);
-    // TODO: Shouldn't be newHead?????
     const isOutOfBoundaries = boardBorderDirectionMap.get(direction)?.includes(head);
 
-    // Out of Boundaries
-    if (isOutOfBoundaries || isSnakeCrash) onGameOver();
+    // Out of Boundaries or Crash
+    if (isOutOfBoundaries || isSnakeCrash) {
+      onGameOver();
+      return;
+    }
 
     const newSnakePosition = getNewSnakePosition({
       newHeadPosition,
@@ -146,7 +147,6 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
     snakeDirection,
   });
   useEffect(() => {
-    console.log('useEffect - SnakePosition');
     const { head, body, tail } = snakePosition;
     const {
       head: oldHead,
@@ -174,7 +174,6 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
   // SetUp sideEffect only on Start-up
   useEffect(() => {
-    console.log('useEffect - Initial render');
     const { head, body, tail } = snakePosition;
 
     calculateBoardBoundaries();
@@ -184,7 +183,6 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
   // Keyboard listener
   useEffect(() => {
-    console.log('useEffect - KeyListener');
     const handleKeyDown = (e: KeyboardEvent): void => {
       const keyAction = keyDownToDirectionSnakeMapper[e.key];
       e.preventDefault();
@@ -197,8 +195,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
   // Automatic movement
   useEffect(() => {
-    console.log('useEffect - Automatic Movement');
-    const timer = setTimeout(() => handleMovement(snakeDirection), 100000);
+    const timer = setTimeout(() => handleMovement(snakeDirection), snakeSpeed);
 
     setSnakeAutomaticMovementTimer(timer);
 

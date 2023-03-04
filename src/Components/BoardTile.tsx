@@ -7,7 +7,7 @@ import SnakeMovementObserver, { SnakeMovementEvent } from 'utils/SnakeObserver';
 import Food from './Food';
 import SnakeHead from './Snake/SnakeHead/SnakeHead';
 import SnakeTail from './Snake/SnakeTail';
-import SnakeUnit from './SnakeBody/SnakeBodyUnit';
+import SnakeUnit from './Snake/SnakeBodyUnit';
 
 const StyledTile = styled.div`
   height: 15px;

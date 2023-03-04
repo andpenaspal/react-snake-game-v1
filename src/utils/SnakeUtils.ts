@@ -1,8 +1,6 @@
 import { MovementDirection, MOVEMENT_DIRECTION } from 'Definitions/Snake';
 import { SnakeMovementEvent } from './SnakeObserver';
 
-export const BoardDimensions = 4;
-
 interface GetNextHeadPosition {
   direction: keyof typeof MOVEMENT_DIRECTION;
   boardDimensions: number;

@@ -5,7 +5,7 @@ import GameHeader from 'Components/GameHeader';
 import GameInstructions from 'Components/GameInstructions';
 import GameOverModal from 'Components/GameOverModal';
 import GameWonModal from 'Components/GameWonModal';
-import React, { FunctionComponent, useCallback, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 
 const StyledHeader = styled.h1`
@@ -16,7 +16,12 @@ const StyledGameContainer = styled.div`
   margin: auto;
   max-width: 750px;
   height: 500px;
-  border: 1px solid red;
+  border: 1px solid
+    ${({
+      theme: {
+        palette: { common },
+      },
+    }) => common.grey200};
   border-radius: 10px;
 `;
 
@@ -31,16 +36,7 @@ const SnakeGamePage: FunctionComponent<any> = () => {
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [isWin, setIsWin] = useState<boolean>(false);
 
-  console.log('Body - SnakeGamePage');
-  const handleIncreaseScore = useCallback((extraScore: number) => {
-    console.log('Function - handleIncreaseScore');
-
-    setScore((prev) => prev + extraScore);
-  }, []);
-  // const handleIncreaseScore = (extraScore: number) => {
-  //   console.log('Function - handleIncreaseScore');
-  //   setScore((prev) => prev + extraScore);
-  // };
+  const handleIncreaseScore = (extraScore: number) => setScore((prev) => prev + extraScore);
 
   const handlePause = () => setIsGamePause((prev) => !prev);
   const handleReset = () => {
