@@ -1,8 +1,9 @@
-import { FlexContainer } from 'Basic Components/FlexContainer';
+import { FlexContainer } from 'BasicComponents/FlexContainer';
 import ControlsNav from 'Components/ControlsNav';
 import GameBoard from 'Components/GameBoard';
 import GameHeader from 'Components/GameHeader';
 import GameInstructions from 'Components/GameInstructions';
+import GameOverModal from 'Components/GameOverModal';
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
@@ -26,6 +27,7 @@ const SnakeGamePage: FunctionComponent<any> = () => {
   const [score, setScore] = useState<number>(0);
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGamePause, setIsGamePause] = useState<boolean>(false);
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
   console.log('Body - SnakeGamePage');
   const handleIncreaseScore = useCallback((extraScore: number) => {
@@ -44,6 +46,11 @@ const SnakeGamePage: FunctionComponent<any> = () => {
     setIsGamePause(false);
     setIsGameStarted(false);
   };
+  const handleTryAgain = () => {
+    setIsGameOver(false);
+    handleReset();
+  };
+  const handleLost = () => setIsGameOver(true);
 
   return (
     <>
@@ -58,9 +65,14 @@ const SnakeGamePage: FunctionComponent<any> = () => {
           handlePause={handlePause}
           handleReset={handleReset}
         />
+        {isGameOver && <GameOverModal onClose={handleTryAgain} />}
         {isGameStarted ? (
           <StyledBoardContainer>
-            <GameBoard extraScore={handleIncreaseScore} isPause={isGamePause} />
+            <GameBoard
+              extraScore={handleIncreaseScore}
+              isPause={isGamePause}
+              onGameOver={handleLost}
+            />
           </StyledBoardContainer>
         ) : (
           <GameInstructions />

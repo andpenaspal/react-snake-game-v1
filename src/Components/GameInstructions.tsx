@@ -1,6 +1,6 @@
-import { FlexContainer } from 'Basic Components/FlexContainer';
-import { Header2, Header3 } from 'Basic Components/Header';
-import Typography from 'Basic Components/Typography';
+import { FlexContainer } from 'BasicComponents/FlexContainer';
+import { Header2, Header3 } from 'BasicComponents/Header';
+import Typography from 'BasicComponents/Typography';
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 

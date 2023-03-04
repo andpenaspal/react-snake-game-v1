@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Typography = styled.span`
+const Typography = styled.div`
   font-size: ${({
     theme: {
       typography: { fontSize },

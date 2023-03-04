@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { FlexContainer } from 'Basic Components/FlexContainer';
+import { FlexContainer } from 'BasicComponents/FlexContainer';
 import styled from 'styled-components';
 
 const StyledFlexContainer = styled(FlexContainer)`

@@ -1,5 +1,5 @@
-import Button from 'Basic Components/Button';
-import { FlexContainer } from 'Basic Components/FlexContainer';
+import Button from 'BasicComponents/Button';
+import { FlexContainer } from 'BasicComponents/FlexContainer';
 import React, { FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
 

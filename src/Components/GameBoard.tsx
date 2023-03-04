@@ -1,4 +1,4 @@
-import { FlexContainer } from 'Basic Components/FlexContainer';
+import { FlexContainer } from 'BasicComponents/FlexContainer';
 import {
   initialSnakeState,
   MovementDirection,
@@ -59,10 +59,11 @@ const loadInitBoard = () =>
 
 interface GameBoardProps {
   isPause: boolean;
+  onGameOver: () => void;
   extraScore: (extraScore: number) => void;
 }
 
-const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause }) => {
+const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause, onGameOver }) => {
   const board = useMemo(() => loadInitBoard(), []);
   const [snakePosition, setSnakePosition] = useState<SnakeMovementEvent>(initialSnakeState);
   const [foodPosition, setFoodPosition] = useState<number>(
@@ -109,10 +110,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause }) =
     const isOutOfBoundaries = boardBorderDirectionMap.get(direction)?.includes(head);
 
     // Out of Boundaries
-    if (isOutOfBoundaries) alert('You Lost!');
-
-    // Crash itself
-    if (isSnakeCrash) alert('You Lost!');
+    if (isOutOfBoundaries || isSnakeCrash) onGameOver();
 
     if (isFoodEaten) {
       setNewFoodPosition();
