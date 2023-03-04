@@ -1,40 +1,47 @@
 import { MovementDirection, MOVEMENT_DIRECTION } from 'Definitions/Snake';
 import { SnakeMovementEvent } from './SnakeObserver';
 
-export const BoardDimensions = 20;
+export const BoardDimensions = 4;
 
-interface GetNextSnakePosition extends SnakeMovementEvent {
+interface GetNextHeadPosition {
   direction: keyof typeof MOVEMENT_DIRECTION;
   boardDimensions: number;
-  isLastBodyEaten: boolean;
+  headPosition: number;
 }
-
-// eslint-disable-next-line import/prefer-default-export
-export const getNextSnakePosition = ({
+export const getNextHeadPosition = ({
   direction,
   boardDimensions,
+  headPosition,
+}: GetNextHeadPosition): number => {
+  const calcMov = {
+    UP: headPosition - boardDimensions,
+    DOWN: headPosition + boardDimensions,
+    RIGHT: headPosition + 1,
+    LEFT: headPosition - 1,
+  };
+
+  return calcMov[direction];
+};
+
+interface GetNewSnakePosition extends SnakeMovementEvent {
+  newHeadPosition: number;
+  isFoodEaten: boolean;
+}
+export const getNewSnakePosition = ({
+  newHeadPosition,
   head,
   body,
   tail,
-  isLastBodyEaten,
-}: GetNextSnakePosition): SnakeMovementEvent => {
-  const calcMov = {
-    UP: head - boardDimensions,
-    DOWN: head + boardDimensions,
-    RIGHT: head + 1,
-    LEFT: head - 1,
-  };
-
-  if (isLastBodyEaten) {
+  isFoodEaten,
+}: GetNewSnakePosition): SnakeMovementEvent => {
+  if (isFoodEaten)
     return {
-      head: calcMov[direction],
+      head: newHeadPosition,
       body: [head, ...body],
       tail,
     };
-  }
-
   return {
-    head: calcMov[direction],
+    head: newHeadPosition,
     body: [head, ...body.slice(0, -1)],
     tail: [...body].pop()!,
   };

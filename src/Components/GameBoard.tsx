@@ -12,10 +12,11 @@ import SnakeMovementTraceObserver, { SnakeMovementTraceEvent } from 'utils/Snake
 import SnakeMovementObserver, { SnakeMovementEvent } from 'utils/SnakeObserver';
 import {
   getRandomPosition,
-  getNextSnakePosition,
+  getNextHeadPosition,
   keyDownToDirectionSnakeMapper,
   getBoardBoundaries,
   BoardDimensions,
+  getNewSnakePosition,
 } from 'utils/SnakeUtils';
 import BoardTile from './BoardTile';
 import GamePause from './GamePause';
@@ -60,10 +61,16 @@ const loadInitBoard = () =>
 interface GameBoardProps {
   isPause: boolean;
   onGameOver: () => void;
+  onWin: () => void;
   extraScore: (extraScore: number) => void;
 }
 
-const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause, onGameOver }) => {
+const GameBoard: FunctionComponent<GameBoardProps> = ({
+  extraScore,
+  isPause,
+  onGameOver,
+  onWin,
+}) => {
   const board = useMemo(() => loadInitBoard(), []);
   const [snakePosition, setSnakePosition] = useState<SnakeMovementEvent>(initialSnakeState);
   const [foodPosition, setFoodPosition] = useState<number>(
@@ -72,9 +79,10 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause, onG
       exclusions: [...Object.values(initialSnakeState)].flat(),
     }),
   );
-  const [eatenFoodPosition, setEatenFoodPosition] = useState<number[]>([]);
+  // const [eatenFoodPosition, setEatenFoodPosition] = useState<number[]>([]);
   const [snakeDirection, setSnakeDirection] = useState<MovementDirection>(MOVEMENT_DIRECTION.LEFT);
   const [snakeAutomaticMovementTimer, setSnakeAutomaticMovementTimer] = useState<NodeJS.Timeout>();
+  const [isWin, setIsWin] = useState<boolean>(false);
 
   console.log('Body - re-render');
 
@@ -93,36 +101,36 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause, onG
 
   const handleMovement = (direction: MovementDirection) => {
     console.log('Function - handleMovement');
-    if (isPause) return;
+    if (isPause || isWin) return;
     clearTimeout(snakeAutomaticMovementTimer);
 
     const { head, body, tail } = snakePosition;
-    const isGrowSnake = eatenFoodPosition.includes(tail);
+    // const isGrowSnake = eatenFoodPosition.includes(tail);
 
-    const newSnakePosition = getNextSnakePosition({
+    const newHeadPosition = getNextHeadPosition({
       boardDimensions: BoardDimensions,
       direction,
-      ...snakePosition,
-      isLastBodyEaten: isGrowSnake,
+      headPosition: head,
     });
-    const { head: newHead } = newSnakePosition;
 
-    const isSnakeCrash = [head, ...body, tail].includes(newHead);
-    const isFoodEaten = newHead === foodPosition;
+    const isFoodEaten = newHeadPosition === foodPosition;
+    const isSnakeCrash = [head, ...body, tail].includes(newHeadPosition);
+    // TODO: Shouldn't be newHead?????
     const isOutOfBoundaries = boardBorderDirectionMap.get(direction)?.includes(head);
 
     // Out of Boundaries
     if (isOutOfBoundaries || isSnakeCrash) onGameOver();
 
+    const newSnakePosition = getNewSnakePosition({
+      newHeadPosition,
+      isFoodEaten,
+      ...snakePosition,
+    });
+
     if (isFoodEaten) {
       const newFoodPosition = setNewFoodPosition(newSnakePosition);
-      setEatenFoodPosition((prev) => [...prev, newHead]);
       extraScore(50);
-      if (!newFoodPosition) alert('You Won!');
-    }
-
-    if (isGrowSnake) {
-      setEatenFoodPosition((prev) => prev.filter((pos) => pos !== tail));
+      if (newFoodPosition === undefined) setIsWin(true);
     }
 
     setSnakeDirection(direction);
@@ -196,6 +204,10 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause, onG
 
     return () => clearTimeout(timer);
   }, [snakePosition, isPause]);
+
+  useEffect(() => {
+    if (isWin) onWin();
+  }, [isWin]);
 
   return (
     <StyledBoardBordered isPause={isPause}>
