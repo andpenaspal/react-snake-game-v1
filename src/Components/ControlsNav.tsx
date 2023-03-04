@@ -21,6 +21,7 @@ interface ControlsNavProps {
   isStarted: boolean;
   isPause: boolean;
   handlePause: () => void;
+  handleReset: () => void;
 }
 
 const ControlsNav: FunctionComponent<ControlsNavProps> = ({
@@ -28,6 +29,7 @@ const ControlsNav: FunctionComponent<ControlsNavProps> = ({
   handleStart,
   isPause,
   handlePause,
+  handleReset,
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -49,7 +51,9 @@ const ControlsNav: FunctionComponent<ControlsNavProps> = ({
             <Button color="primary" onClick={handlePause}>
               {isPause ? 'Resume' : 'Pause'}
             </Button>
-            <Button color="warning200">Reset</Button>
+            <Button color="warning200" onClick={handleReset}>
+              Reset
+            </Button>
           </>
         ) : (
           <Button color="primary" onClick={handleStart}>

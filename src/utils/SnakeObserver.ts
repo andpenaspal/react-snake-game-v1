@@ -1,11 +1,15 @@
 import Subscribable from './Subscribable';
 
-export interface SnakeStateEvent {
+export interface SnakeMovementEvent {
   head: number;
   tail: number;
   body: number[];
 }
 
-const SnakeObserver = new Subscribable<SnakeStateEvent>();
+/**
+ * Observer to publish the State of the Snake, its movement.
+ * Where is Head, Body and Tail.
+ */
+const SnakeMovementObserver = new Subscribable<SnakeMovementEvent>();
 
-export default SnakeObserver;
+export default SnakeMovementObserver;

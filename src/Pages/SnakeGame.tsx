@@ -3,7 +3,7 @@ import ControlsNav from 'Components/ControlsNav';
 import GameBoard from 'Components/GameBoard';
 import GameHeader from 'Components/GameHeader';
 import GameInstructions from 'Components/GameInstructions';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 const StyledHeader = styled.h1`
@@ -27,8 +27,23 @@ const SnakeGamePage: FunctionComponent<any> = () => {
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGamePause, setIsGamePause] = useState<boolean>(false);
 
-  const handleIncreaseScore = (extraScore: number) => setScore((prev) => prev + extraScore);
+  console.log('Body - SnakeGamePage');
+  const handleIncreaseScore = useCallback((extraScore: number) => {
+    console.log('Function - handleIncreaseScore');
+
+    setScore((prev) => prev + extraScore);
+  }, []);
+  // const handleIncreaseScore = (extraScore: number) => {
+  //   console.log('Function - handleIncreaseScore');
+  //   setScore((prev) => prev + extraScore);
+  // };
+
   const handlePause = () => setIsGamePause((prev) => !prev);
+  const handleReset = () => {
+    setScore(0);
+    setIsGamePause(false);
+    setIsGameStarted(false);
+  };
 
   return (
     <>
@@ -41,15 +56,15 @@ const SnakeGamePage: FunctionComponent<any> = () => {
           handleStart={() => setIsGameStarted(true)}
           isPause={isGamePause}
           handlePause={handlePause}
+          handleReset={handleReset}
         />
-        {!isGameStarted && <GameInstructions />}
-        <StyledBoardContainer>
-          <GameBoard
-            extraScore={handleIncreaseScore}
-            isStarted={isGameStarted}
-            isPause={isGamePause}
-          />
-        </StyledBoardContainer>
+        {isGameStarted ? (
+          <StyledBoardContainer>
+            <GameBoard extraScore={handleIncreaseScore} isPause={isGamePause} />
+          </StyledBoardContainer>
+        ) : (
+          <GameInstructions />
+        )}
       </StyledGameContainer>
     </>
   );

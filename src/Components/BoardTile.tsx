@@ -2,8 +2,8 @@ import { MovementDirection, MovementDirectionCorner, MOVEMENT_DIRECTION } from '
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FoodObserver from 'utils/FoodObserver';
-import SnakeMovementObserver, { SnakeMovementEvent } from 'utils/SnakeMovementObserver';
-import SnakeObserver, { SnakeStateEvent } from 'utils/SnakeObserver';
+import SnakeMovementTraceObserver, { SnakeMovementTraceEvent } from 'utils/SnakeMovementObserver';
+import SnakeMovementObserver, { SnakeMovementEvent } from 'utils/SnakeObserver';
 import Food from './Food';
 import SnakeHead from './Snake/SnakeHead/SnakeHead';
 import SnakeTail from './Snake/SnakeTail';
@@ -37,7 +37,7 @@ const handleFood = (id: number, setFood: (v: boolean) => void) => (newFood: numb
 
 const handleMove =
   (id: number, setSnakeState: (state?: keyof typeof SNAKE_DEF) => void) =>
-  ({ head, body, tail }: SnakeStateEvent) => {
+  ({ head, body, tail }: SnakeMovementEvent) => {
     if (id === head) return setSnakeState(SNAKE_DEF.HEAD);
     if (body.includes(id)) return setSnakeState(SNAKE_DEF.BODY);
     if (id === tail) return setSnakeState(SNAKE_DEF.TAIL);
@@ -52,7 +52,7 @@ const handleDirection =
       movement: MovementDirection | MovementDirectionCorner;
     }) => void,
   ) =>
-  ({ headMovementDirection, cornerDirection, head }: SnakeMovementEvent) => {
+  ({ headMovementDirection, cornerDirection, head }: SnakeMovementTraceEvent) => {
     if (id === head)
       return setSnakeMovement({
         isDirection: true,
@@ -109,10 +109,11 @@ const BoardTile: FunctionComponent<TileProps> = ({ id }) => {
   };
 
   useEffect(() => {
-    SnakeObserver.subscribe(id, handleMove(id, setSnakeState));
+    SnakeMovementObserver.subscribe(id, handleMove(id, setSnakeState));
     FoodObserver.subscribe(id, handleFood(id, setFood));
-    SnakeMovementObserver.subscribe(id, handleDirection(id, setSnakeMovement));
+    SnakeMovementTraceObserver.subscribe(id, handleDirection(id, setSnakeMovement));
   }, []);
+
   const element = () => {
     if (isHead) return <SnakeHead movementDirection={movementDirection!} />;
     if (isBody) return <SnakeUnit movementDirection={movementTrace!} />;

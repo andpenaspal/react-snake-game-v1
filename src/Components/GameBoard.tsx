@@ -5,11 +5,11 @@ import {
   MovementDirectionCorner,
   MOVEMENT_DIRECTION,
 } from 'Definitions/Snake';
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import FoodObserver from 'utils/FoodObserver';
-import SnakeMovementObserver from 'utils/SnakeMovementObserver';
-import SnakeObserver, { SnakeStateEvent } from 'utils/SnakeObserver';
+import SnakeMovementTraceObserver, { SnakeMovementTraceEvent } from 'utils/SnakeMovementObserver';
+import SnakeMovementObserver, { SnakeMovementEvent } from 'utils/SnakeObserver';
 import {
   getRandomPosition,
   getNextSnakePosition,
@@ -32,11 +32,9 @@ const calculateBoardBoundaries = () => {
 };
 
 interface StyledBoardProps {
-  isStarted: boolean;
   isPause: boolean;
 }
 const StyledBoardBordered = styled.div<StyledBoardProps>`
-  display: ${({ isStarted }) => (isStarted ? 'block' : 'none')};
   ${({ isPause }) => isPause && ` & { position: relative; } `}
   padding: 3px;
   border: 1px solid red;
@@ -56,28 +54,31 @@ const loadInitBoard = () =>
   ));
 
 // TODO:
-// Pause and Restart
 // Lost!
-// Score on eat
-// Faster on more score?
 // Head not moving. Have a component with ref and just replacing it? to not re-render itself?
 
 interface GameBoardProps {
-  isStarted: boolean;
   isPause: boolean;
   extraScore: (extraScore: number) => void;
 }
 
-const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, isPause }) => {
-  const [board, setBoard] = useState<React.ReactElement[]>();
-  const [snakePosition, setSnakePosition] = useState<SnakeStateEvent>(initialSnakeState);
-  const [foodPosition, setFoodPosition] = useState<number>(0);
+const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause }) => {
+  const board = useMemo(() => loadInitBoard(), []);
+  const [snakePosition, setSnakePosition] = useState<SnakeMovementEvent>(initialSnakeState);
+  const [foodPosition, setFoodPosition] = useState<number>(
+    getRandomPosition({
+      possibilities: [...board.keys()],
+      exclusions: [...Object.values(initialSnakeState)].flat(),
+    }),
+  );
   const [eatenFoodPosition, setEatenFoodPosition] = useState<number[]>([]);
   const [snakeDirection, setSnakeDirection] = useState<MovementDirection>(MOVEMENT_DIRECTION.LEFT);
   const [snakeAutomaticMovementTimer, setSnakeAutomaticMovementTimer] = useState<NodeJS.Timeout>();
 
+  console.log('Body - re-render');
+
   const setNewFoodPosition = () => {
-    if (!board?.keys()) return;
+    console.log('Function - setNewFoodPosition');
     const { head, body, tail } = snakePosition;
     const newFoodPosition = getRandomPosition({
       possibilities: [...board.keys()],
@@ -88,6 +89,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
   };
 
   const handleMovement = (direction: MovementDirection) => {
+    console.log('Function - handleMovement');
     if (isPause) return;
     clearTimeout(snakeAutomaticMovementTimer);
 
@@ -100,7 +102,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
       ...snakePosition,
       isLastBodyEaten: isGrowSnake,
     });
-    const { head: newHead /* body: newBody */ } = newSnakePosition;
+    const { head: newHead } = newSnakePosition;
 
     const isSnakeCrash = [head, ...body, tail].includes(newHead);
     const isFoodEaten = newHead === foodPosition;
@@ -113,10 +115,9 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
     if (isSnakeCrash) alert('You Lost!');
 
     if (isFoodEaten) {
-      // TODO: Maybe here newSnakePosition? Or both?
       setNewFoodPosition();
       setEatenFoodPosition((prev) => [...prev, newHead]);
-      extraScore(100);
+      extraScore(50);
     }
 
     if (isGrowSnake) {
@@ -131,11 +132,12 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
   // E.g., AutomaticMov and KeyMov almost at once, would send 2 different positions, resulting in a "lost head".
   // AutomaticMov would set Head in one place and KeyMov in another. Both would publish and only the last would be established in the state.
   // This approach only publishes after update, publishing transactionally with the state
-  const previousSnakeState = useRef<SnakeStateEvent & { snakeDirection: MovementDirection }>({
+  const previousSnakeState = useRef<SnakeMovementEvent & { snakeDirection: MovementDirection }>({
     ...snakePosition,
     snakeDirection,
   });
   useEffect(() => {
+    console.log('useEffect - SnakePosition');
     const { head, body, tail } = snakePosition;
     const {
       head: oldHead,
@@ -143,43 +145,37 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
       snakeDirection: oldSnakeDirection,
     } = previousSnakeState.current;
 
-    SnakeObserver.publishOnly([head, oldHead, tail, oldTail], snakePosition);
-
-    // TODO: Revisit this. Why sending corner direction all the time? Change name?
-    SnakeMovementObserver.publishOnly([head, body[0]!], {
+    const snakeTrace: SnakeMovementTraceEvent = {
       head,
       headMovementDirection: snakeDirection,
       cornerDirection:
         snakeDirection !== oldSnakeDirection
           ? (`${oldSnakeDirection}_${snakeDirection}` as MovementDirectionCorner)
           : snakeDirection,
-    });
+    };
 
-    // Maybe in the return? Check it out
-    previousSnakeState.current = { ...snakePosition, snakeDirection };
+    SnakeMovementObserver.publishOnly([head, oldHead, tail, oldTail], snakePosition);
+
+    SnakeMovementTraceObserver.publishOnly([head, body[0]!], snakeTrace);
+
+    return () => {
+      previousSnakeState.current = { ...snakePosition, snakeDirection };
+    };
   }, [snakePosition]);
-
-  useEffect(() => {
-    const boards = loadInitBoard();
-    setBoard(boards);
-    calculateBoardBoundaries();
-  }, []);
 
   // SetUp sideEffect only on Start-up
   useEffect(() => {
-    if (!board) return;
+    console.log('useEffect - Initial render');
     const { head, body, tail } = snakePosition;
-    const firstFoodPosition = getRandomPosition({
-      possibilities: [...board.keys()],
-      exclusions: [head, ...body, tail],
-    });
-    setFoodPosition(firstFoodPosition);
-    FoodObserver.publishOnly([firstFoodPosition, foodPosition], firstFoodPosition);
-    SnakeObserver.publishOnly([head, ...body, tail], initialSnakeState);
-  }, [board]);
+
+    calculateBoardBoundaries();
+    FoodObserver.publishOnly([foodPosition], foodPosition);
+    SnakeMovementObserver.publishOnly([head, ...body, tail], initialSnakeState);
+  }, []);
 
   // Keyboard listener
   useEffect(() => {
+    console.log('useEffect - KeyListener');
     const handleKeyDown = (e: KeyboardEvent): void => {
       const keyAction = keyDownToDirectionSnakeMapper[e.key];
       e.preventDefault();
@@ -190,17 +186,18 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isStarted, i
     return () => window.removeEventListener('keydown', handleKeyDown, true);
   }, [snakePosition, isPause]);
 
+  // Automatic movement
   useEffect(() => {
-    if (!isStarted) return undefined;
+    console.log('useEffect - Automatic Movement');
     const timer = setTimeout(() => handleMovement(snakeDirection), 100000);
 
     setSnakeAutomaticMovementTimer(timer);
 
     return () => clearTimeout(timer);
-  }, [snakePosition, isStarted, isPause]);
+  }, [snakePosition, isPause]);
 
   return (
-    <StyledBoardBordered isStarted={isStarted} isPause={isPause}>
+    <StyledBoardBordered isPause={isPause}>
       {isPause && <GamePause />}
       <StyledBoard>{board}</StyledBoard>
     </StyledBoardBordered>

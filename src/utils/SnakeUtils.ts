@@ -1,9 +1,9 @@
 import { MovementDirection, MOVEMENT_DIRECTION } from 'Definitions/Snake';
-import { SnakeStateEvent } from './SnakeObserver';
+import { SnakeMovementEvent } from './SnakeObserver';
 
 export const BoardDimensions = 20;
 
-interface GetNextSnakePosition extends SnakeStateEvent {
+interface GetNextSnakePosition extends SnakeMovementEvent {
   direction: keyof typeof MOVEMENT_DIRECTION;
   boardDimensions: number;
   isLastBodyEaten: boolean;
@@ -17,7 +17,7 @@ export const getNextSnakePosition = ({
   body,
   tail,
   isLastBodyEaten,
-}: GetNextSnakePosition): SnakeStateEvent => {
+}: GetNextSnakePosition): SnakeMovementEvent => {
   const calcMov = {
     UP: head - boardDimensions,
     DOWN: head + boardDimensions,

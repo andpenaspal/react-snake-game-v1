@@ -1,12 +1,16 @@
 import { MovementDirection, MovementDirectionCorner, MOVEMENT_DIRECTION } from 'Definitions/Snake';
 import Subscribable from './Subscribable';
 
-export interface SnakeMovementEvent {
+export interface SnakeMovementTraceEvent {
   head: number;
   headMovementDirection: keyof typeof MOVEMENT_DIRECTION;
   cornerDirection: MovementDirection | MovementDirectionCorner;
 }
 
-const SnakeMovementObserver = new Subscribable<SnakeMovementEvent>();
+/**
+ * Observer to publish the Trace of the Snake in its movement.
+ * The direction of the snake on its Movement.
+ */
+const SnakeMovementTraceObserver = new Subscribable<SnakeMovementTraceEvent>();
 
-export default SnakeMovementObserver;
+export default SnakeMovementTraceObserver;
