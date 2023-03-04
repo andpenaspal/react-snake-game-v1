@@ -52,7 +52,6 @@ const StyledTypography = styled(Typography)`
   margin-bottom: 40px;
 `;
 
-// Do we need children or does it go automatically?
 interface BasicModalProps extends PropsWithChildren {
   buttonText: string;
   buttonColor: keyof IColors;

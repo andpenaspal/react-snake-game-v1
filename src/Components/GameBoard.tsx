@@ -78,15 +78,17 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause, onG
 
   console.log('Body - re-render');
 
-  const setNewFoodPosition = () => {
+  const setNewFoodPosition = (newSnakePosition: SnakeMovementEvent) => {
     console.log('Function - setNewFoodPosition');
-    const { head, body, tail } = snakePosition;
+    const { head, body, tail } = newSnakePosition;
     const newFoodPosition = getRandomPosition({
       possibilities: [...board.keys()],
       exclusions: [head, ...body, tail],
     });
+    console.log({ newFoodPosition });
     setFoodPosition(newFoodPosition);
     FoodObserver.publishOnly([foodPosition, newFoodPosition], newFoodPosition);
+    return newFoodPosition;
   };
 
   const handleMovement = (direction: MovementDirection) => {
@@ -113,9 +115,10 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({ extraScore, isPause, onG
     if (isOutOfBoundaries || isSnakeCrash) onGameOver();
 
     if (isFoodEaten) {
-      setNewFoodPosition();
+      const newFoodPosition = setNewFoodPosition(newSnakePosition);
       setEatenFoodPosition((prev) => [...prev, newHead]);
       extraScore(50);
+      if (!newFoodPosition) alert('You Won!');
     }
 
     if (isGrowSnake) {
