@@ -55,7 +55,7 @@ const GameInstructions: FunctionComponent = () => (
       </StyledTypographyControls>
     </InstructionWrapper>
     <InstructionWrapper>
-      <img src="/key-p.png" alt="P Keyboard" />
+      <img src="key-p.png" alt="P Keyboard" />
       <StyledTypographyControls>
         Press the letter P or the Space Bar to Pause the Game
       </StyledTypographyControls>
