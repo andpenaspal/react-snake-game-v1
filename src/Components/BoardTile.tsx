@@ -12,11 +12,8 @@ import SnakeUnit from './Snake/SnakeBodyUnit';
 const StyledTile = styled.div`
   height: 15px;
   width: 15px;
-  /* height: 35px;
-  width: 35px; */
 
   background-color: lightblue;
-  /* border: 1px solid black; */
   box-sizing: border-box;
   display: flex;
   justify-content: center;

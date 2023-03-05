@@ -86,7 +86,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
   );
   const [snakeDirection, setSnakeDirection] = useState<MovementDirection>(MOVEMENT_DIRECTION.LEFT);
   const [snakeAutomaticMovementTimer, setSnakeAutomaticMovementTimer] = useState<NodeJS.Timeout>();
-  const [isWin, setIsWin] = useState<boolean>(false);
+  const [isOver, setIsOver] = useState<boolean>(false);
 
   const setNewFoodPosition = (newSnakePosition: SnakeMovementEvent) => {
     const { head, body, tail } = newSnakePosition;
@@ -100,11 +100,10 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
   };
 
   const handleMovement = (direction: MovementDirection) => {
-    if (isPause || isWin) return;
     clearTimeout(snakeAutomaticMovementTimer);
+    if (isPause || isOver) return;
 
     const { head, body, tail } = snakePosition;
-    // const isGrowSnake = eatenFoodPosition.includes(tail);
 
     const newHeadPosition = getNextHeadPosition({
       boardDimensions: BoardDimensions,
@@ -118,6 +117,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
     // Out of Boundaries or Crash
     if (isOutOfBoundaries || isSnakeCrash) {
+      setIsOver(true);
       onGameOver();
       return;
     }
@@ -131,7 +131,11 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
     if (isFoodEaten) {
       const newFoodPosition = setNewFoodPosition(newSnakePosition);
       extraScore(50);
-      if (newFoodPosition === undefined) setIsWin(true);
+      if (newFoodPosition === undefined) {
+        setIsOver(true);
+        onWin();
+        return;
+      }
     }
 
     setSnakeDirection(direction);
@@ -191,7 +195,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
     window.addEventListener('keydown', handleKeyDown, true);
     return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [snakePosition, isPause]);
+  }, [snakePosition, isPause, isOver]);
 
   // Automatic movement
   useEffect(() => {
@@ -200,11 +204,9 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
     setSnakeAutomaticMovementTimer(timer);
 
     return () => clearTimeout(timer);
-  }, [snakePosition, isPause]);
-
-  useEffect(() => {
-    if (isWin) onWin();
-  }, [isWin]);
+    // isPause and isOver trigger the action. CleanUp old timer with out of date state in closure
+    // The new one has updated state so gets caught in "handleMovement"
+  }, [snakePosition, isPause, isOver]);
 
   return (
     <StyledBoardBordered isPause={isPause}>

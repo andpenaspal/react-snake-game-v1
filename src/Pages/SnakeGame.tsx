@@ -5,7 +5,7 @@ import GameHeader from 'Components/GameHeader';
 import GameInstructions from 'Components/GameInstructions';
 import GameOverModal from 'Components/GameOverModal';
 import GameWonModal from 'Components/GameWonModal';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const StyledHeader = styled.h1`
@@ -35,12 +35,18 @@ const SnakeGamePage: FunctionComponent<any> = () => {
   const [isGamePause, setIsGamePause] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [isWin, setIsWin] = useState<boolean>(false);
+  const [isResetTimer, setIsResetTimer] = useState<boolean>(false);
 
+  const handleStart = () => {
+    setScore(0);
+    setIsResetTimer(true);
+    setIsGameStarted(true);
+  };
   const handleIncreaseScore = (extraScore: number) => setScore((prev) => prev + extraScore);
 
   const handlePause = () => setIsGamePause((prev) => !prev);
+
   const handleReset = () => {
-    setScore(0);
     setIsGamePause(false);
     setIsGameStarted(false);
   };
@@ -52,15 +58,25 @@ const SnakeGamePage: FunctionComponent<any> = () => {
   const handleLost = () => setIsGameOver(true);
   const handleWin = () => setIsWin(true);
 
+  useEffect(() => {
+    if (isResetTimer) setIsResetTimer(false);
+  }, [isResetTimer]);
+
   return (
     <>
       <StyledHeader>Snake Game</StyledHeader>
 
       <StyledGameContainer>
-        <GameHeader score={score} />
+        {(isWin || isGameOver) && <span>Last Score</span>}
+        <GameHeader
+          score={score}
+          isPause={isGamePause || isGameOver}
+          isStarted={isGameStarted}
+          isReset={isResetTimer}
+        />
         <ControlsNav
           isStarted={isGameStarted}
-          handleStart={() => setIsGameStarted(true)}
+          handleStart={handleStart}
           isPause={isGamePause}
           handlePause={handlePause}
           handleReset={handleReset}
