@@ -47,9 +47,9 @@ const GameInstructions: FunctionComponent = () => (
     <StyledHeader3>Game Controls</StyledHeader3>
     <InstructionWrapper>
       <img src="arrow-down.png" alt="Arrow Down Keyboard" />
-      <img src="/arrow-up.png" alt="Arrow Up Keyboard" />
-      <img src="/arrow-left.png" alt="Arrow Left Keyboard" />
-      <img src="/arrow-right.png" alt="Arrow Right Keyboard" />
+      <img src="arrow-up.png" alt="Arrow Up Keyboard" />
+      <img src="arrow-left.png" alt="Arrow Left Keyboard" />
+      <img src="arrow-right.png" alt="Arrow Right Keyboard" />
       <StyledTypographyControls>
         Use the Keyboard Arrows to control the Snake
       </StyledTypographyControls>
