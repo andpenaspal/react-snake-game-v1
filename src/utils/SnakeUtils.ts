@@ -93,14 +93,3 @@ export const getBoardBoundaries = (boardDimensions: number): BoardBoundaries => 
     leftBoundaries,
   };
 };
-
-// export const castDirectionToSide: {
-//   [key in VerticalDirection | HorizontalDirection]: key extends VerticalDirection
-//     ? keyof SnakeHeadVerticalAnimation
-//     : keyof SnakeHeadHorizontalAnimation;
-// } = {
-//   [MOVEMENT_DIRECTION.UP]: 'up',
-//   [MOVEMENT_DIRECTION.DOWN]: 'down',
-//   [MOVEMENT_DIRECTION.RIGHT]: 'right',
-//   [MOVEMENT_DIRECTION.LEFT]: 'left',
-// };
