@@ -8,6 +8,7 @@ const baseCornerCSS = `
   width: 40%;
   height: 40%;
   border-radius: 20px 20px 5px 5px;
+  margin: 1px;
   `;
 
 const downCornerCSS = `align-self: flex-end;`;
@@ -31,55 +32,36 @@ border-radius: 20px 20px 20px 5px;
 `;
 
 const rightMoveCSS = `
-        width: 100%;
-        height: 50%;
-        border-radius: 20px 20px 5px 5px;
-        align-self: flex-end;
+  width: 100%;
+  height: 50%;
+  border-radius: 20px 20px 5px 5px;
+  align-self: flex-end;
+  margin-bottom: 1px;
+
 `;
 
 const leftMoveCSS = `
-        width: 100%;
-        height: 50%;
-        border-radius: 20px 20px 5px 5px;
-        align-self: flex-end;
+  width: 100%;
+  height: 50%;
+  border-radius: 20px 20px 5px 5px;
+  align-self: flex-end;
+  margin-bottom: 1px;
 `;
 
 const downMoveCSS = `
-        width: 50%;
-        height: 100%;
-        border-radius: 20px 5px 5px 20px;
-        margin-left: auto;
+  width: 50%;
+  height: 100%;
+  border-radius: 20px 5px 5px 20px;
+  margin-left: auto;
+  margin-right: 1px;
 `;
 
 const upMoveCSS = `
-        width: 50%;
-        height: 100%;
-        border-radius: 5px 20px 20px 5px;
-        margin-right: auto;
-`;
-
-const downRightMoveCSS = (bgColor: string) => `
-  width: 100%;
+  width: 50%;
   height: 100%;
-  position: relative;
-  &:before {
-    position: absolute;
-    background: ${bgColor};
-    content: '';
-    width: 100%;
-    height: 50%;
-    border-radius: 20px 20px 5px 5px;
-    top: 50%;
-  }
-  &:after {
-    position: absolute;
-    background: ${bgColor};
-    left: 50%;
-    width: 50%;
-    height: 100%;
-    content: '';
-    border-radius: 20px 5px 5px 20px;
-  }
+  border-radius: 5px 20px 20px 5px;
+  margin-right: auto;
+  margin-left: 1px;
 `;
 
 const downLeftMoveCSS = (bgColor: string) => `
@@ -90,17 +72,42 @@ const downLeftMoveCSS = (bgColor: string) => `
     position: absolute;
     background: ${bgColor};
     content: '';
-    width: 100%;
+    width: 90%;
     height: 50%;
     border-radius: 20px 20px 5px 5px;
-    top: 50%;
+    top: 45%;
   }
   &:after {
     position: absolute;
     background: ${bgColor};
-    right: 50%;
+    left: 45%;
     width: 50%;
-    height: 100%;
+    height: 90%;
+    content: '';
+    border-radius: 20px 5px 5px 20px;
+  }
+`;
+
+const leftUpMoveCSS = (bgColor: string) => `
+  width: 100%;
+  height: 100%;
+  position: relative;
+  &:before {
+    position: absolute;
+    background: ${bgColor};
+    content: '';
+    width: 90%;
+    height: 50%;
+    border-radius: 20px 20px 5px 5px;
+    top: 40%;
+    margin-left: 1px;
+  }
+  &:after {
+    position: absolute;
+    background: ${bgColor};
+    right: 40%;
+    width: 50%;
+    height: 90%;
     content: '';
     border-radius: 5px 20px 5px 20px;
   }
@@ -130,8 +137,8 @@ const snakeBodyCSS: (
       bgColor: string,
     ) => string;
   } = {
-    DOWN_LEFT: downRightMoveCSS,
-    LEFT_UP: downLeftMoveCSS,
+    DOWN_LEFT: downLeftMoveCSS,
+    LEFT_UP: leftUpMoveCSS,
   };
 
   if (v === MOVEMENT_DIRECTION_CORNER.DOWN_LEFT || v === MOVEMENT_DIRECTION_CORNER.LEFT_UP) {
