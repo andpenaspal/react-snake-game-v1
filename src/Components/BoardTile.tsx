@@ -70,7 +70,6 @@ const BoardTile: FunctionComponent<TileProps> = ({ id }) => {
   const [isBody, setBody] = useState(false);
   const [isTail, setTail] = useState(false);
   const [isFood, setFood] = useState(false);
-  // const [isEaten, setIsEaten] = useState(false);
 
   const setSnakeState = (state?: keyof typeof SNAKE_DEF) => {
     if (!state) {
@@ -114,7 +113,7 @@ const BoardTile: FunctionComponent<TileProps> = ({ id }) => {
   const element = () => {
     if (isHead) return <SnakeHead movementDirection={movementDirection!} />;
     if (isBody) return <SnakeUnit movementDirection={movementTrace!} />;
-    if (isTail) return <SnakeTail />;
+    if (isTail) return <SnakeTail movementDirection={movementTrace!} />;
     if (isFood) return <Food />;
     return null;
   };
