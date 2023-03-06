@@ -46,16 +46,16 @@ const GameInstructions: FunctionComponent = () => (
     </StyledTypographyInstructions>
     <StyledHeader3>Game Controls</StyledHeader3>
     <InstructionWrapper>
-      <img src="arrow-down.png" alt="Arrow Down Keyboard" />
-      <img src="arrow-up.png" alt="Arrow Up Keyboard" />
-      <img src="arrow-left.png" alt="Arrow Left Keyboard" />
-      <img src="arrow-right.png" alt="Arrow Right Keyboard" />
+      <img src={`${process.env.PUBLIC_URL}/arrow-down.png`} alt="Arrow Down Keyboard" />
+      <img src={`${process.env.PUBLIC_URL}/arrow-up.png`} alt="Arrow Up Keyboard" />
+      <img src={`${process.env.PUBLIC_URL}/arrow-left.png`} alt="Arrow Left Keyboard" />
+      <img src={`${process.env.PUBLIC_URL}/arrow-right.png`} alt="Arrow Right Keyboard" />
       <StyledTypographyControls>
         Use the Keyboard Arrows to control the Snake
       </StyledTypographyControls>
     </InstructionWrapper>
     <InstructionWrapper>
-      <img src="key-p.png" alt="P Keyboard" />
+      <img src={`${process.env.PUBLIC_URL}/key-p.png`} alt="P Keyboard" />
       <StyledTypographyControls>
         Press the letter P or the Space Bar to Pause the Game
       </StyledTypographyControls>
