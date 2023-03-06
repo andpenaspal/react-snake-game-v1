@@ -46,7 +46,7 @@ const GameInstructions: FunctionComponent = () => (
     </StyledTypographyInstructions>
     <StyledHeader3>Game Controls</StyledHeader3>
     <InstructionWrapper>
-      <img src={`${process.env.PUBLIC_URL}/arrow-down.png`} alt="Arrow Down Keyboard" />
+      <img src={`${process.env.PUBLIC_URL}/arrow-down.png`} alt="Arrow Down Keyboardx" />
       <img src={`${process.env.PUBLIC_URL}/arrow-up.png`} alt="Arrow Up Keyboard" />
       <img src={`${process.env.PUBLIC_URL}/arrow-left.png`} alt="Arrow Left Keyboard" />
       <img src={`${process.env.PUBLIC_URL}/arrow-right.png`} alt="Arrow Right Keyboard" />
