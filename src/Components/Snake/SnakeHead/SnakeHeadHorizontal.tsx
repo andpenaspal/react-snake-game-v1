@@ -1,5 +1,5 @@
 import { HorizontalDirection, SnakeUnitProps, snakeDimension } from 'Definitions/Snake';
-import { snakeHeadAnimation } from 'Definitions/SnakeEat';
+import { snakeHeadMovementCSS } from 'Definitions/SnakeEat';
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
@@ -13,16 +13,13 @@ const BaseHorizontalSnakeHead = styled.div<SnakeUnitProps<HorizontalDirection>>`
 const SnakeHeadTop = styled(BaseHorizontalSnakeHead)`
   top: 0;
   border-radius: ${`${snakeDimension.head}px ${snakeDimension.head}px 0px 0px;`};
-  animation: ${({ movementDirection: movement }) => snakeHeadAnimation[movement].topSideAnimation}
-    0.5s infinite linear;
+  ${({ movementDirection: movement }) => snakeHeadMovementCSS[movement].topSide}
 `;
 
 const SnakeHeadBottom = styled(BaseHorizontalSnakeHead)`
   bottom: 0;
   border-radius: ${`0 0 ${snakeDimension.head}px ${snakeDimension.head}px`};
-  animation: ${({ movementDirection: movement }) =>
-      snakeHeadAnimation[movement].bottomSideAnimation}
-    0.5s infinite linear;
+  ${({ movementDirection: movement }) => snakeHeadMovementCSS[movement].bottomSide}
 `;
 
 const SnakeHeadHorizontal: FunctionComponent<SnakeUnitProps<HorizontalDirection>> = (props) => (

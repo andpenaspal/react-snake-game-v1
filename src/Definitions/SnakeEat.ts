@@ -1,81 +1,60 @@
-import { Keyframes, keyframes } from 'styled-components';
 import { MOVEMENT_DIRECTION } from './Snake';
 
-interface HorizontalSidesAnimation {
-  topSideAnimation: Keyframes;
-  bottomSideAnimation: Keyframes;
+interface HorizontalSides {
+  topSide: string;
+  bottomSide: string;
 }
 
-interface VerticalSidesAnimation {
-  rightSideAnimation: Keyframes;
-  leftSideAnimation: Keyframes;
+interface VerticalSides {
+  rightSide: string;
+  leftSide: string;
 }
 
-export interface SnakeHeadVerticalAnimation {
-  [MOVEMENT_DIRECTION.UP]: VerticalSidesAnimation;
-  [MOVEMENT_DIRECTION.DOWN]: VerticalSidesAnimation;
+export interface SnakeHeadVertical {
+  [MOVEMENT_DIRECTION.UP]: VerticalSides;
+  [MOVEMENT_DIRECTION.DOWN]: VerticalSides;
 }
 
-export interface SnakeHeadHorizontalAnimation {
-  [MOVEMENT_DIRECTION.LEFT]: HorizontalSidesAnimation;
-  [MOVEMENT_DIRECTION.RIGHT]: HorizontalSidesAnimation;
+export interface SnakeHeadHorizontal {
+  [MOVEMENT_DIRECTION.LEFT]: HorizontalSides;
+  [MOVEMENT_DIRECTION.RIGHT]: HorizontalSides;
 }
 
-const rightMovement: HorizontalSidesAnimation = {
-  topSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(-35deg);}`,
-
-  bottomSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(35deg);}`,
+const rightMovement: HorizontalSides = {
+  topSide: 'transform: rotate(-20deg);',
+  bottomSide: 'transform: rotate(20deg);',
 };
 
-const leftMovement: HorizontalSidesAnimation = {
-  topSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(35deg);}`,
-
-  bottomSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(-35deg);}`,
+const leftMovement: HorizontalSides = {
+  topSide: 'transform: rotate(20deg);',
+  bottomSide: 'transform: rotate(-20deg);',
 };
 
-const downMovement: VerticalSidesAnimation = {
-  rightSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(-35deg);}`,
-
-  leftSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(35deg);}`,
+const downMovement: VerticalSides = {
+  rightSide: 'transform: rotate(-20deg);',
+  leftSide: 'transform: rotate(20deg);',
 };
 
-const upMovement: VerticalSidesAnimation = {
-  rightSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(35deg);}`,
-
-  leftSideAnimation: keyframes`
-  0% {transform: rotate(0deg);}
-  50% {transform: rotate(-35deg);}`,
+const upMovement: VerticalSides = {
+  rightSide: 'transform: rotate(20deg);',
+  leftSide: 'transform: rotate(-20deg);',
 };
 
-export const snakeHeadAnimation: SnakeHeadHorizontalAnimation & SnakeHeadVerticalAnimation = {
+export const snakeHeadMovementCSS: SnakeHeadHorizontal & SnakeHeadVertical = {
   [MOVEMENT_DIRECTION.UP]: {
-    rightSideAnimation: upMovement.rightSideAnimation,
-    leftSideAnimation: upMovement.leftSideAnimation,
+    rightSide: upMovement.rightSide,
+    leftSide: upMovement.leftSide,
   },
   [MOVEMENT_DIRECTION.DOWN]: {
-    rightSideAnimation: downMovement.rightSideAnimation,
-    leftSideAnimation: downMovement.leftSideAnimation,
+    rightSide: downMovement.rightSide,
+    leftSide: downMovement.leftSide,
   },
   [MOVEMENT_DIRECTION.RIGHT]: {
-    topSideAnimation: rightMovement.topSideAnimation,
-    bottomSideAnimation: rightMovement.bottomSideAnimation,
+    topSide: rightMovement.topSide,
+    bottomSide: rightMovement.bottomSide,
   },
   [MOVEMENT_DIRECTION.LEFT]: {
-    topSideAnimation: leftMovement.topSideAnimation,
-    bottomSideAnimation: leftMovement.bottomSideAnimation,
+    topSide: leftMovement.topSide,
+    bottomSide: leftMovement.bottomSide,
   },
 };
