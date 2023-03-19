@@ -90,6 +90,7 @@ const SnakeGamePage: FunctionComponent<any> = () => {
               isPause={isGamePause}
               onGameOver={handleLost}
               onWin={handleWin}
+              currentScore={score}
             />
           </StyledBoardContainer>
         ) : (

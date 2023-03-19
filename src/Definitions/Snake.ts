@@ -1,6 +1,28 @@
 import { Colors } from 'styled';
 
-export const snakeSpeed = 100;
+export const foodScore = 50;
+
+export const getSnakeSpeed = ({
+  boardDimensions,
+  currentScore,
+}: {
+  boardDimensions: number;
+  currentScore: number;
+}) => {
+  const minSpeed = 230;
+  const maxSpeed = 100;
+
+  const maxScore = boardDimensions * boardDimensions * foodScore;
+  const brackets = 4;
+  const changeBracket = Math.floor(maxScore / brackets);
+
+  const scoreBracket = Array.from({ length: brackets }).map((_, i) => changeBracket * i);
+  const currentScoreBracket = scoreBracket.findIndex((v: number) => v > currentScore) - 1;
+
+  // brackets -1 so maxSpeed in last ScoreBracket and not maxScore
+  return Math.floor(minSpeed - ((minSpeed - maxSpeed) / (brackets - 1)) * currentScoreBracket);
+};
+
 export const initialSnakeState = { head: 30, body: [31, 32, 33], tail: 34 };
 
 export const snakeDimension = { head: 14, body: 10, tail: { width: 10, height: 7 } };

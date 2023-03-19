@@ -5,7 +5,8 @@ import {
   MovementDirection,
   MovementDirectionCorner,
   MOVEMENT_DIRECTION,
-  snakeSpeed,
+  getSnakeSpeed,
+  foodScore,
 } from 'Definitions/Snake';
 import React, { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -60,14 +61,12 @@ const loadInitBoard = () =>
     <BoardTile key={index} id={index} />
   ));
 
-// TODO:
-// Head not moving. Have a component with ref and just replacing it? to not re-render itself?
-
 interface GameBoardProps {
   isPause: boolean;
   onGameOver: () => void;
   onWin: () => void;
   extraScore: (extraScore: number) => void;
+  currentScore: number;
 }
 
 const GameBoard: FunctionComponent<GameBoardProps> = ({
@@ -75,6 +74,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
   isPause,
   onGameOver,
   onWin,
+  currentScore,
 }) => {
   const board = useMemo(() => loadInitBoard(), []);
   const [snakePosition, setSnakePosition] = useState<SnakeMovementEvent>(initialSnakeState);
@@ -130,7 +130,7 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
     if (isFoodEaten) {
       const newFoodPosition = setNewFoodPosition(newSnakePosition);
-      extraScore(50);
+      extraScore(foodScore);
       if (newFoodPosition === undefined) {
         setIsOver(true);
         onWin();
@@ -199,7 +199,10 @@ const GameBoard: FunctionComponent<GameBoardProps> = ({
 
   // Automatic movement
   useEffect(() => {
-    const timer = setTimeout(() => handleMovement(snakeDirection), snakeSpeed);
+    const timer = setTimeout(
+      () => handleMovement(snakeDirection),
+      getSnakeSpeed({ boardDimensions: BoardDimensions, currentScore }),
+    );
 
     setSnakeAutomaticMovementTimer(timer);
 
