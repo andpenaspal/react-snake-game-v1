@@ -1,12 +1,12 @@
-import { MOVEMENT_DIRECTION, snakeDimension, SnakeMovementDirection } from 'Definitions/Snake';
+import { MOVEMENT_DIRECTION, SnakeMovementDirection } from 'Definitions/Snake';
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import SnakeHeadHorizontal from './SnakeHeadHorizontal';
 import SnakeHeadVertical from './SnakeHeadVertical';
 
 const StyledDiv = styled.div`
-  width: ${snakeDimension.head}px;
-  height: ${snakeDimension.head}px;
+  width: 90%;
+  height: 90%;
   position: relative;
 `;
 

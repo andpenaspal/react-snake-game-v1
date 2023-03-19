@@ -15,7 +15,7 @@ const StyledHeader = styled.h1`
 const StyledGameContainer = styled.div`
   margin: auto;
   max-width: 750px;
-  height: 500px;
+  padding: 20px;
   border: 1px solid
     ${({
       theme: {

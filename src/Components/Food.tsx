@@ -2,8 +2,8 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 const StyledDiv = styled.div`
-  height: 5px;
-  width: 5px;
+  height: 40%;
+  width: 40%;
   border-radius: 50%;
   background-color: ${({
     theme: {

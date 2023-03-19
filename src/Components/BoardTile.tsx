@@ -4,16 +4,23 @@ import styled from 'styled-components';
 import FoodObserver from 'utils/FoodObserver';
 import SnakeMovementTraceObserver, { SnakeMovementTraceEvent } from 'utils/SnakeMovementObserver';
 import SnakeMovementObserver, { SnakeMovementEvent } from 'utils/SnakeObserver';
+import { TileDimensions } from 'Definitions/Board';
 import Food from './Food';
 import SnakeHead from './Snake/SnakeHead/SnakeHead';
 import SnakeTail from './Snake/SnakeTail';
 import SnakeUnit from './Snake/SnakeBodyUnit';
 
 const StyledTile = styled.div`
-  height: 15px;
-  width: 15px;
+  height: ${TileDimensions}px;
+  width: ${TileDimensions}px;
 
-  background-color: lightblue;
+  background-color: ${({
+    theme: {
+      palette: {
+        general: { backgroundColor },
+      },
+    },
+  }) => backgroundColor.light};
   box-sizing: border-box;
   display: flex;
   justify-content: center;

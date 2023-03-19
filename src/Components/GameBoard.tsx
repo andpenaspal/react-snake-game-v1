@@ -1,5 +1,5 @@
 import { FlexContainer } from 'BasicComponents/FlexContainer';
-import BoardDimensions from 'Definitions/Board';
+import { BoardDimensions, TileDimensions } from 'Definitions/Board';
 import {
   initialSnakeState,
   MovementDirection,
@@ -52,8 +52,8 @@ const StyledBoardBordered = styled.div<StyledBoardProps>`
 const StyledBoard = styled(FlexContainer)`
   flex-wrap: wrap;
   margin: auto;
-  width: ${() => `${15 * BoardDimensions}px`};
-  height: ${() => `${15 * BoardDimensions}px`};
+  width: ${() => `${TileDimensions * BoardDimensions}px`};
+  height: ${() => `${TileDimensions * BoardDimensions}px`};
 `;
 
 const loadInitBoard = () =>

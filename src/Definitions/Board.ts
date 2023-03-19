@@ -1,3 +1,3 @@
-const BoardDimensions = 20;
+export const BoardDimensions = 20;
 
-export default BoardDimensions;
+export const TileDimensions = 20;

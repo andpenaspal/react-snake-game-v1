@@ -96,11 +96,11 @@ const leftUpMoveCSS = (bgColor: string) => `
     position: absolute;
     background: ${bgColor};
     content: '';
-    width: 90%;
+    width: 85%;
     height: 50%;
     border-radius: 20px 20px 5px 5px;
-    top: 40%;
-    margin-left: 1px;
+    top: 45%;
+    margin-left: 2px;
   }
   &:after {
     position: absolute;
@@ -110,6 +110,7 @@ const leftUpMoveCSS = (bgColor: string) => `
     height: 90%;
     content: '';
     border-radius: 5px 20px 5px 20px;
+    margin-top: 1px;
   }
 `;
 
